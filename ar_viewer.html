@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AR Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background: #f7f7f7;
+      }
+      a {
+        padding: 1em 2em;
+        background: #000;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <a id="ar-link" href="#">Открыть в AR</a>
+
+    <script>
+      const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isAndroid = /android/i.test(navigator.userAgent);
+
+      const usdzLink = 'https://cdn.jsdelivr.net/gh/Mishaptrv/singularity/122untitled.usdz';
+      const glbLink = 'https://cdn.jsdelivr.net/gh/Mishaptrv/singularity/122untitled.glb';
+
+      const button = document.getElementById('ar-link');
+
+      if (isiOS) {
+        button.href = usdzLink;
+      } else if (isAndroid) {
+        const intentLink =
+          `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glbLink)}&mode=ar_preferred` +
+          `#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;` +
+          `S.browser_fallback_url=${encodeURIComponent(glbLink)};end;`;
+
+        button.addEventListener('click', function (e) {
+          e.preventDefault();
+          window.location.href = intentLink;
+        });
+      } else {
+        button.href = '#';
+        button.innerText = 'Ваше устройство не поддерживает AR';
+        button.style.background = '#888';
+      }
+    </script>
+  </body>
+</html>
